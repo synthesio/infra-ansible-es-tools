@@ -1,0 +1,61 @@
+---
+
+- name: Check that the rack is present
+  assert:
+    that:
+      - rack is defined and rack != ""
+    msg: "You a rack_id or you'll reboot the whole cluster!!!"
+  tags: [ "check_vars" ]
+
+- name: Get the cluster health
+  uri: 
+    url: "{{ endpoint }}/health"
+    method: GET
+    return_content: yes
+  delegate_to: localhost
+  register: cluster_health
+  run_once: yes
+
+- name: Get the number of nodes inside the cluster
+  shell: echo {{ cluster_health }} | awk -F ',' '{print $4}' | cut -f 2 -d ':'
+  register: hosts_presents
+  run_once: yes
+
+- name: Disable shard allocation
+  uri: 
+    url: "{{ endpoint }}/_settings"
+    method: PUT
+    body: "{{ query_before }}"
+    body_format: json
+  delegate_to: localhost
+  run_once: true
+
+- name: Restart the data nodes, by rack_id
+  service:
+    name: "elasticsearch"
+    state: restarted
+  when: rack_id == "{{ rack }}"
+
+- name: Wait for all the hosts to come back
+  include: "_rolling_restart.yml"
+  until: nodes_back is defined and nodes_back >= hosts_presents
+  retries: 60
+  delay: 5
+
+- name: Enable allocation again
+  uri: 
+    url: "{{ endpoint }}/settings"
+    method: PUT
+    body: "{{ query_after }}"
+    body_format: json
+  delegate_to: localhost
+  run_once: true
+
+- name: Wait for the cluster to be green again
+  uri:
+    url: "{{ endpoint }}/health"
+    return_content: yes
+  register: result
+  until: result.find("green")
+  retries: 600
+  delay: 5

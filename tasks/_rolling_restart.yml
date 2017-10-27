@@ -1,0 +1,15 @@
+---
+
+- name: Get the cluster health
+  uri: 
+    url: "{{ endpoint }}/health"
+    method: GET
+    return_content: yes
+  delegate_to: localhost
+  register: cluster_health
+  run_once: yes
+
+- name: Get the number of nodes inside the cluster
+  shell: echo {{ cluster_health }} | awk -F ',' '{print $4}' | cut -f 2 -d ':'
+  register: hosts_back
+  run_once: yes
