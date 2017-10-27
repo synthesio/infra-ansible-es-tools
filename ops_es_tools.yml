@@ -1,0 +1,8 @@
+---
+
+- hosts: elasticsearch
+  vars_files:
+    - "vars/{{ stage }}/escluster/{{cluster_name}}.yml"
+  when: cluster_name is defined and cluster_name != ""
+  roles:
+    - es_tools
