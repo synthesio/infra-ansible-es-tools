@@ -1,0 +1,21 @@
+---
+
+- name: check for specific vars
+  assert:
+    that:
+      - replicas != ""
+      - replicas >= 0
+  tags: [ "check_vars" ]
+
+- name: Include task specific vars
+  include_vars:
+    file: vars/{{ task }}.yml
+  tags: always
+
+- name: Update number of replicas
+  uri: 
+    url: "{{ endpoint }}"
+    method: PUT
+    body: "{{ query }}"
+    body_format: json
+  delegate_to: localhost

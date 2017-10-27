@@ -1,0 +1,8 @@
+---
+
+endpoint: "http://{{ inventory_hostname }}:9200{% if index is defined and index != '' %}/{{ index }}{% endif %}/_settings"
+query: '{
+    "index" : {
+        "number_of_replicas" : "{{ replicas }}"
+    }
+}'
