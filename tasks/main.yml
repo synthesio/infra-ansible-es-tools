@@ -3,8 +3,6 @@
 - name: check we have not forgotten any mandatory vars
   assert:
     that:
-      - cluster_name != ""
-      - es_version != ""
       - task != ""
   tags: [ "check_vars" ]
 
