@@ -3,3 +3,5 @@
 state: "transient"
 cluster_port: 9200
 cluster_addr: "http://{{ inventory_hostname }}:{{ cluster_port }}"
+shards: 5
+replicas: 1

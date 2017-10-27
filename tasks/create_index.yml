@@ -1,0 +1,30 @@
+---
+
+- name: Check that the index name is defined
+  assert:
+    that:
+      - index is defgined and index != ""
+    msg: "Index name is missing"
+  tags: [ "check_vars" ]
+
+- name: Check that the number of shards > 0
+  assert:
+    that:
+      - shards is defined and shards | int > 1
+    msg: "The number of shards must be > 1, got {{ shards }}"
+  tags: [ "check_vars" ]
+
+- name: Check that the number of replicas >= 0
+  assert:
+    that:
+      - shards is defined and shards | int >= 0
+    msg: "The number of replicas must be >= 0, got {{ replicas }}"
+  tags: [ "check_vars" ]
+
+- name: Create index
+  uri: 
+    url: "{{ endpoint }}"
+    method: PUT
+    body: "{{ query }}"
+    body_format: json
+  delegate_to: localhost

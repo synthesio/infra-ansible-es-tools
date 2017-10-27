@@ -1,0 +1,12 @@
+---
+
+endpoint: "{{ cluster_addr }}/{{ index }}"
+query: '{
+    "settings" : { 
+       "index" : {
+            "number_of_shards" : "{{ shards }}",
+            "number_of_replicas" : {{ replicas }}
+        
+        }
+    }
+}'
