@@ -1,0 +1,30 @@
+---
+
+- name: Check that the index name is defined
+  assert:
+    that:
+      - index is defgined and index != ""
+    msg: "Index name is missing"
+  tags: [ "check_vars" ]
+
+- name: Check that the action is defined
+  assert:
+    that:
+      - action is defined and (action == "include" or action == "exclude")
+    msg: "Action must be defined and either include or exclude"
+  tags: [ "check_vars" ]
+
+- name: Check that that we know what to include / exclude
+  assert:
+    that:
+      - what is defined and (what == "rack" or what == "zone" or what == "_ip")
+    msg: "What must be defined and either rack, zone or _ip"
+  tags: [ "check_vars" ]
+
+- name: Do the exclusion
+  uri: 
+    url: "{{ endpoint }}"
+    method: PUT
+    body: "{{ query }}"
+    body_format: json
+  delegate_to: localhost

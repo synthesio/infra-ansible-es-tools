@@ -1,0 +1,7 @@
+---
+
+endpoint: "{{ cluster_addr }}/{{ index }}/_settings"
+query: '{
+    "index.routing.allocation.{{ action }}.{{ what }}" : "{{ value }}"
+}'
+
