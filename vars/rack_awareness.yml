@@ -1,0 +1,9 @@
+---
+
+state: "transient"
+endpoint: "http://{{ inventory_hostname }}:9200/_cluster/settings"
+query: '{
+    "{{ state }}" : {
+        "cluster.routing.allocation.awareness.attributes": "{{ action }}"
+    }
+}'

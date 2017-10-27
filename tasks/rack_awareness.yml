@@ -1,0 +1,21 @@
+---
+
+- name: check for specific vars
+  assert:
+    that:
+      - action is defined and action == "enable" or action == "disable"
+      - state == "transient" or state == "persistent"
+  tags: [ "check_vars" ]
+
+- name: Include task specific vars
+  include_vars:
+    file: vars/{{ task }}.yml
+  tags: always
+
+- name: Update refresh time replicas
+  uri: 
+    url: "{{ endpoint }}"
+    method: PUT
+    body: "{{ query }}"
+    body_format: json
+  delegate_to: localhost
