@@ -4,6 +4,12 @@
   assert:
     that:
       - task != ""
+  msg: "Task is mandatory: optimize_cluster, optimize_index, rack_awareness, update_refresh_time, update_replicas"
   tags: [ "check_vars" ]
+
+- name: Include task specific vars
+  include_vars:
+    file: vars/{{ task }}.yml
+  tags: always
 
 - include: "{{ task }}.yml"

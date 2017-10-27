@@ -1,16 +1,12 @@
 ---
 
-- name: check for specific vars
+- name: Check for the number of replicas
   assert:
     that:
       - replicas != ""
       - replicas >= 0
+    msg: "Replicas must be >= 0, {{ replicas }} given"
   tags: [ "check_vars" ]
-
-- name: Include task specific vars
-  include_vars:
-    file: vars/{{ task }}.yml
-  tags: always
 
 - name: Update number of replicas
   uri: 

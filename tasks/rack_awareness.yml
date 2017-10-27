@@ -1,16 +1,18 @@
 ---
 
-- name: check for specific vars
+- name: Check that action is defined and correct
   assert:
     that:
       - action is defined and action == "enable" or action == "disable"
-      - state == "transient" or state == "persistent"
+    msg: "The task var is mandatory and should be either enable or disable, {{ action }} was given"
   tags: [ "check_vars" ]
-
-- name: Include task specific vars
-  include_vars:
-    file: vars/{{ task }}.yml
-  tags: always
+  
+- name: Check that the state is either transient or persistent
+  assert:
+    that:
+      - state == "transient" or state == "persistent"
+    msg: "State must be either transient or persistent, {{ state }} was given"
+  tags: [ "check_vars" ]
 
 - name: Update refresh time replicas
   uri: 

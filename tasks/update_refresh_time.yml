@@ -1,15 +1,11 @@
 ---
 
-- name: check for specific vars
+- name: Check that refresh time is present
   assert:
     that:
       - refresh_time != ""
+    msg: "Refresh time is missing"
   tags: [ "check_vars" ]
-
-- name: Include task specific vars
-  include_vars:
-    file: vars/{{ task }}.yml
-  tags: always
 
 - name: Update refresh time replicas
   uri: 

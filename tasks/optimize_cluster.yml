@@ -1,20 +1,16 @@
 ---
 
-- name: check for specific vars
+- name: Check Elasticsearch version
   assert:
     that:
       - es_version != ""
       - es_version > 0
+    msg: "Elasticsearch version must be numeric, {{ es_version }} was given"
   tags: [ "check_vars" ]
-
-- name: Include task specific vars
-  include_vars:
-    file: vars/{{ task }}.yml
-  tags: always
 
 - name: get the index list
   uri: 
-    url: "{{ endpoint }}/_cat/indices"
+    url: "{{ cluster_addr }}/_cat/indices"
     method: GET
   delegate_to: localhost
   register: indices
@@ -25,7 +21,7 @@
   
 - name: Optimize a cluster
   uri: 
-    url: "{{ endpoint }}/{{ item }}/{{ optimize_endpoint }}?max_num_segments={{ segments }}"
+    url: "{{ cluster_addr }}/{{ item }}/{{ optimize_endpoint }}?max_num_segments={{ segments }}"
     method: GET
   delegate_to: localhost
   with_items: "{{ to_process }}"

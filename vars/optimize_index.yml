@@ -2,4 +2,4 @@
 
 optimize_endpoint: {% if es_version | int == 2 %}_optimize{% else %}_force_merge{% endif %}
 segments: {% if segments is defined and segments != '' %}{{ segments }}{% else %}1{% endif %}
-endpoint: "http://{{ inventory_hostname }}:9200/{{ index }}/{{ optimize_endpoint }}?max_num_segments={{ segments }}"
+endpoint: "{{ cluster_addr }}/{{ index }}/{{ optimize_endpoint }}?max_num_segments={{ segments }}"

@@ -1,17 +1,19 @@
 ---
 
-- name: check for specific vars
+- name: Check Elasticsearch version
+  assert:
+    that:
+      - es_version != ""
+      - es_version > 0
+    msg: "Elasticsearch version must be numeric, {{ es_version }} was given"
+  tags: [ "check_vars" ]
+
+- name: Check index name is present
   assert:
     that:
       - index != ""
-      - es_version != ""
-      - es_version > 0
+    msg: "Index name is missing"
   tags: [ "check_vars" ]
-
-- name: Include task specific vars
-  include_vars:
-    file: vars/{{ task }}.yml
-  tags: always
 
 - name: Optimize an index
   uri: 
