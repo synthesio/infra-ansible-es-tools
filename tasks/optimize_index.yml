@@ -1,0 +1,20 @@
+---
+
+- name: check for specific vars
+  assert:
+    that:
+      - index != ""
+      - es_version != ""
+      - es_version > 0
+  tags: [ "check_vars" ]
+
+- name: Include task specific vars
+  include_vars:
+    file: vars/{{ task }}.yml
+  tags: always
+
+- name: Optimize an index
+  uri: 
+    url: "{{ endpoint }}"
+    method: GET
+  delegate_to: localhost
