@@ -1,0 +1,31 @@
+---
+
+- name: check for specific vars
+  assert:
+    that:
+      - es_version != ""
+      - es_version > 0
+  tags: [ "check_vars" ]
+
+- name: Include task specific vars
+  include_vars:
+    file: vars/{{ task }}.yml
+  tags: always
+
+- name: get the index list
+  uri: 
+    url: "{{ endpoint }}/_cat/indices"
+    method: GET
+  delegate_to: localhost
+  register: indices
+  
+- name: sort the indexes by deleted
+  shell: echo "{{ indices }}" | sort -rnk7 | awk '{print $3}'
+  register: to_process
+  
+- name: Optimize a cluster
+  uri: 
+    url: "{{ endpoint }}/{{ item }}/{{ optimize_endpoint }}?max_num_segments={{ segments }}"
+    method: GET
+  delegate_to: localhost
+  with_items: "{{ to_process }}"
