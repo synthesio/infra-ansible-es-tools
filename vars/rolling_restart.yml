@@ -9,19 +9,19 @@ query_before: '{
 query_after: '{
     "{{ state }}" : {
         "cluster.routing.allocation.enable" : "all",
-        "cluster.routing.allocation.node_initial_primaries_recoveries": 50,
-        "cluster.routing.allocation.node_concurrent_recoveries": 30,
-        "indices.recovery.max_bytes_per_sec": "4096mb",
-        "indices.recovery.concurrent_small_file_streams": "50",
-        "indices.recovery.concurrent_streams": "20",
-        "cluster.routing.allocation.disk.threshold_enabled" : true,
-        "cluster.routing.allocation.disk.watermark.low" : "78%",
-        "cluster.routing.allocation.disk.watermark.high" : "79%",
-        "cluster.routing.allocation.cluster_concurrent_rebalance": 50,
-        "cluster.routing.rebalance.enable": "all",
-        "cluster.routing.allocation.balance.index": "0.45f",
-        "cluster.routing.allocation.balance.shard": "0.45f",
-        "cluster.routing.allocation.balance.threshold": "1.0f",
-        "cluster.routing.allocation.allow_rebalance": "always"
+        "cluster.routing.allocation.node_initial_primaries_recoveries": {{ node_initial_primaries_recoveries }},
+        "cluster.routing.allocation.node_concurrent_recoveries": {{ node_concurrent_recoveries }},
+        "indices.recovery.max_bytes_per_sec": "{{ max_bytes_per_sec }}",
+        "indices.recovery.concurrent_small_file_streams": "{{ concurrent_small_file_streams }}",
+        "indices.recovery.concurrent_streams": "{{ concurrent_streams }}",
+        "cluster.routing.allocation.disk.threshold_enabled" : {{ threshold_enabled }},
+        "cluster.routing.allocation.disk.watermark.low" : "{{ watermark_low }}",
+        "cluster.routing.allocation.disk.watermark.high" : "{{ watermark_high }}",
+        "cluster.routing.allocation.cluster_concurrent_rebalance": {{ cluster_concurrent_rebalance }},
+        "cluster.routing.rebalance.enable": "{{ rebalance.enable }}",
+        "cluster.routing.allocation.balance.index": "{{ balance_index }}",
+        "cluster.routing.allocation.balance.shard": "{{ balance_shard }}",
+        "cluster.routing.allocation.balance.threshold": "{{ balance_threshold }}",
+        "cluster.routing.allocation.allow_rebalance": "{{ allow_rebalance }}"
     }
 }'

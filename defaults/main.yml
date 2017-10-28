@@ -6,3 +6,19 @@ cluster_addr: "http://{{ inventory_hostname }}:{{ cluster_port }}"
 shards: 5
 replicas: 1
 value: ""
+
+# Reallocation and recovery settings.
+node_initial_primaries_recoveries: 50
+node_concurrent_recoveries: 30
+max_bytes_per_sec: "4096mb"
+concurrent_small_file_streams: 50
+concurrent_streams: 20
+threshold_enabled: "true"
+watermark_low: "78%"
+watermark_high: "79%"
+cluster_concurrent_rebalance: 50
+rebalance_enable: "{{ all }}"
+balance_index: "0.45f"
+balance_shard: "0.45f"
+balance_threshold: "1.0f"
+allow_rebalance: "always"
